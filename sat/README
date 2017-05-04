@@ -1,0 +1,62 @@
+Each subdirectory corresponds to a SAT solver back end with a specific
+version.  Multiple versions of the same solver need separate top level
+directories here.
+
+To explain the structure consider the 
+
+  picosat961
+  
+directory which at the same time is also the specific signature name
+<IPASIRSOLVER> of this solver.  This directory name has to match the string
+returned by the 'ipasir_signature' function.  We also expect that the name
+is both a legal file name and a legal C symbol name.  In particular it
+should not contain white space nor punctuation characters.Please use
+underscores '_' if needed.  Thus you can not have a space ' ', a dash '-',
+nor dot '.' as signature name or directory name.
+
+Each solver has its own package in the solver directory, like
+
+  picosat961/picosat-961.tar.gz
+
+This is supposed to be the standard distribution package for the solver,
+e.g., as available for download on the web.  Further there has to be a
+'makefile' (lower case), e.g.,
+
+  picosat961/makefile
+  
+Its default goal should extract the package, build the library, compile
+additional glue code and to include everything into one library, e.g.,
+'picosat961/libipasirpicosat961.a'.  Compiling the glue code and optionally
+merging it with the original library code is the responsibility of the
+'makefile' too.
+
+For 'picosat961' we include a simple separate glue code defined in
+'picosat961/ipasirpicosatglue.c' which is compiled and added to the
+archive of the original library and then gives the main target
+
+  picosat961/libipasirpicosat961.a
+  
+These target libraries thus have the generic name 
+
+  <IPASIRSOLVER>/libipasir<IPASIRSOLVER>.a
+
+You can assume that the 'ipasir.h' header file is in the top level
+directory, e.g., available as '../../ipasir.h' from the solver directory.
+
+To prepare a submission to the competition go to the 'ipasir/sat'
+directory and zip your solver, e.g., 
+
+  ipasir/sat$ tar zcf ipasirpicosat961.tar.gz picosat961/
+
+This should contain the 'makefile' and all required library and glue code
+for producing the target library, and optionally two specific files for
+linking.  The first one '<IPASIRSOLVER>/LINK' is used to specify the
+required link command, e.g., 'gcc' or 'g++', and the second file
+'<IPASIRSOLVER>/LIBS' contains additional system libraries, e.g., '-lz',
+'-lm', or even '-lstdc++', if necessary.  If the first file does not exist
+or is empty 'cc' is used for linking (which on Ubuntu for instance defaults
+to 'gcc').  If the second file is empty or does not exist then no additional
+libraries are needed.
+
+Armin Biere
+Don Jan 29 15:37:49 CET 2015

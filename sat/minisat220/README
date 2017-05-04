@@ -1,0 +1,11 @@
+This is MiniSAT Version 2.2.0, directly obtained from 'github' on December 19, 2014.
+Then I have just unpacked the 'minisat-master.zip' file renamed the directory to
+'minisat-220' to match the 'picosat' package name format and produced a
+GNU zipped tar file 'minisat-220.tar.gz'.  Then I copied the makefile from
+'picosat960/makefile', adapted it and provided glue code.  For MiniSAT we
+need to 'libz-dev' installed.  This library dependency is specified in 'LIBS'.
+Since all is C++ code, we also need to use 'g++' for linking, thus 'LINK'
+contains 'g++'.
+
+Armin Biere
+Fre Dez 19 21:05:29 CET 2014

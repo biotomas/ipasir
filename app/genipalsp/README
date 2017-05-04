@@ -1,0 +1,6 @@
+The application finds the longest (highest number of vertices)
+simple path (a path without repeated vertices) in a graph.
+
+Tomas Balyo
+KIT, Karlsruhe
+4.5.2017

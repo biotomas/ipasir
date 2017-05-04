@@ -1,0 +1,9 @@
+A trivial porfolio SAT solver based on the ipasir interface.
+Starts a given number (second parameter, default 4) of threads 
+each running the linked SAT solver on the same input (first parameter).
+The clauses of the formula are shuffled for each thread in order
+to diversify the portfolio.
+
+Tomas Balyo
+KIT, Karlsruhe
+22.1.2015

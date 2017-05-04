@@ -1,0 +1,14 @@
+Genipamax is a trivial partial Max-SAT solver 
+based on adding activation literals to soft clauses 
+and encoding a cardinality constraint on these activation literals.
+To encode the cardinality constraint pblib[1] is used.
+
+NOTE: A C++ compiler supporting the std=c++0x flag is required.
+The makefiles expect g++-4.7, if you want to use a different compiler
+update the 'C++11' file.
+
+[1] http://tools.computational-logic.org/content/pblib.php
+
+Tomas Balyo
+KIT, Karlsruhe
+22.1.2015
