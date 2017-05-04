@@ -1,0 +1,36 @@
+--- minisat-220/minisat/core/Solver.h	2013-09-25 14:16:18.000000000 +0200
++++ patched-minisat-220/minisat/core/Solver.h	2017-05-04 09:44:27.285080162 +0200
+@@ -37,6 +37,24 @@
+ class Solver {
+ public:
+ 
++    void* termCallbackState;
++    int (*termCallback)(void* state);
++    void setTermCallback(void* state, int (*termCallback)(void*)) {
++      this->termCallbackState = state;
++      this->termCallback = termCallback;
++    }
++
++    void* learnCallbackState;
++    int* learnCallbackBuffer;
++    int learnCallbackLimit;
++    void (*learnCallback)(void * state, int * clause);
++    void setLearnCallback(void * state, int maxLength, void (*learn)(void * state, int * clause)) {
++      this->learnCallbackState = state;
++      this->learnCallbackLimit = maxLength;
++      this->learnCallbackBuffer = (int*) realloc (this->learnCallbackBuffer, (1+maxLength)*sizeof(int));
++      this->learnCallback = learn;
++    }
++
+     // Constructor/Destructor:
+     //
+     Solver();
+@@ -372,7 +390,7 @@
+ inline void     Solver::clearInterrupt(){ asynch_interrupt = false; }
+ inline void     Solver::budgetOff(){ conflict_budget = propagation_budget = -1; }
+ inline bool     Solver::withinBudget() const {
+-    return !asynch_interrupt &&
++    return !asynch_interrupt && (termCallback == NULL || 0 == termCallback(termCallbackState)) &&
+            (conflict_budget    < 0 || conflicts < (uint64_t)conflict_budget) &&
+            (propagation_budget < 0 || propagations < (uint64_t)propagation_budget); }
+ 

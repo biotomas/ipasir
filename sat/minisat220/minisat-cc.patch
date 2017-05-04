@@ -1,0 +1,39 @@
+--- minisat-220/minisat/core/Solver.cc	2013-09-25 14:16:18.000000000 +0200
++++ patched-minisat-220/minisat/core/Solver.cc	2017-05-04 09:46:29.256352793 +0200
+@@ -53,9 +53,10 @@
+ 
+ Solver::Solver() :
+ 
++    learnCallbackBuffer (NULL)
+     // Parameters (user settable):
+     //
+-    verbosity        (0)
++  , verbosity        (0)
+   , var_decay        (opt_var_decay)
+   , clause_decay     (opt_clause_decay)
+   , random_var_freq  (opt_random_var_freq)
+@@ -106,6 +107,7 @@
+ 
+ Solver::~Solver()
+ {
++  free(this->learnCallbackBuffer);
+ }
+ 
+ 
+@@ -717,6 +719,16 @@
+             learnt_clause.clear();
+             analyze(confl, learnt_clause, backtrack_level);
+             cancelUntil(backtrack_level);
++            
++
++            if (learnCallback != 0 && learnt_clause.size() <= learnCallbackLimit) {
++              for (int i = 0; i < learnt_clause.size(); i++) {
++                Lit lit = learnt_clause[i];
++                learnCallbackBuffer[i] = sign(lit) ? -(var(lit)+1) : (var(lit)+1);
++              }
++              learnCallbackBuffer[learnt_clause.size()] = 0;
++              learnCallback(learnCallbackState, learnCallbackBuffer);
++            }
+ 
+             if (learnt_clause.size() == 1){
+                 uncheckedEnqueue(learnt_clause[0]);
