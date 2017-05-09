@@ -1,0 +1,11 @@
+c number of states: 2
+c number of action vars: 0
+i cnf 2 2
+1 0
+-2 0
+u cnf 2 0
+g cnf 2 1
+2 0
+t cnf 4 2
+-1 4 0
+1 -4 0

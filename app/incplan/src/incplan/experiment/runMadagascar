@@ -1,0 +1,64 @@
+#!/bin/bash
+# -A 1 Algoritm A with paralelity 1 (so basically sequential)
+# -S 1 test each step separately
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+#madagascar=$DIR/../bin/MpC
+madagascar="$DIR/../bin/M"
+
+i=0
+splitPoint=0
+for param in "$@"
+do
+i=$((i + 1))
+case $param in
+	::)
+		splitPoint=$i
+		;;
+esac
+done
+
+problem="${@:1:1}"
+domain="$( dirname "${problem}" )/domain.pddl"
+
+if [ $splitPoint != 0 ]; then
+	madagascarArgs="${@:2:$((splitPoint - 2))}"
+	incplanArgs="${@:$((splitPoint + 1))}"
+
+	incplanInput="problem.in"
+	incplanOutput="problem.out"
+
+	cmd="$madagascar $domain $problem -m 8192 -t 300 $madagascarArgs -b $incplanInput -L"
+	echo ""
+	echo $cmd
+	eval $cmd
+	incplanInput="$incplanInput.cnf"
+
+	cmd="$incplanArgs --outputSolverLike $incplanInput > ${incplanOutput}.all"
+	echo ""
+	echo $cmd
+	/usr/bin/time -f "solvingTime=%e %S %U" bash -c "ulimit -Sv 8388608; $cmd"
+	if [ "$?" -eq 0 ]; then
+
+		#print comments from incplan
+		grep '^ci' "${incplanOutput}.all"
+		grep -v '^c' ${incplanOutput}.all | grep -v -e '^$' > $incplanOutput
+
+		#extract the step size from the result
+		header=($(head -n 1 $incplanOutput))
+		varsPerTime="${header[1]}"
+		steps="${header[2]}"
+		echo "plan size: $steps"
+		echo "vars per time: $varsPerTime"
+		steps=$((steps-1))
+		sed -i '1d' "$incplanOutput"
+
+		cmd="$madagascar $domain $problem -m 8192 -t 300 $madagascarArgs -s $incplanOutput -T $steps"
+		echo ""
+		echo $cmd
+		eval $cmd
+	fi
+else
+	cmd="$madagascar $domain $problem ${@:2}"
+	/usr/bin/time -f "solvingTime=%e %S %U" bash -c "$cmd"
+fi
+	echo ""

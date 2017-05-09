@@ -1,0 +1,3 @@
+#!/bin/bash
+find . -name result -exec echo {} \; -exec grep -E "(Time)|(Plan is)|(OutOfMemoryException)|(runSingleIncrementalExperiment)|(^ci)" '{}' /dev/null \; > collectedData.txt
+find . -name result -exec bash -c "grep -o -E '(^[0-9]*:)|(^STEP [0-9]*)' -H '{}' | tail -n1" \; >> collectedData.txt

@@ -1,0 +1,80 @@
+#!/bin/bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+filter=".*/seq-agl/.*\\.pddl"
+zipFile="$1"
+
+unzip -Z1 $zipFile | grep -E "$filter" | grep -v "domain[^/]*.pddl" > problemList.txt
+
+# Aviable Solver:
+# abcdsat_inc
+# cominisatps2sun
+# cominisatps2sun_nopre
+# cryptominisat4
+# cryptominisat4auto
+# debugprint
+# glucose4
+# minisat220
+# picosat961
+# riss_521
+# riss_600
+
+# heuristical
+
+# Aviable Tools:
+# MpC-e exist
+# MpC-a forall
+# MpC-s sequential
+# Srt-e relaxed relaxed exist
+# Srt-r reinforced
+# Srt-s selective (both above)
+
+# Aviable Options:
+# n
+# s
+# r1
+# r0.5
+# r0.5-S5
+
+# Child processes will inherit limit, the limit is not shared
+# ulimit -Sv 8000000 #8 Gb
+
+## All in one parallel call:
+#~/bin/parallel -j 2 --rpl '{..} 1 $_=$job->slot()-1' taskset -c {..} {} ::: $DIR/runSingleIncrementalExperiment ::: $zipFile :::: problemList.txt ::: MpC-e ::: '-n' '-r 0.5 -l 1' '-r 0.5 -l 2' '-r 0.5 -l 4' '-r 0.5 -l 8' ::: cominisatps2sun_nopre
+
+#~/bin/parallel -j 32 --rpl '{..} 1 $_=$job->slot()-1' taskset -c {..} {} ::: $DIR/runSingleIncrementalExperiment ::: $zipFile :::: problemList.txt ::: MpC-e ::: '-r 0.5' '-r 0.5 ' '-r 0.5  ' '-r 0.5   ' '-n' '-s' ::: heuristical
+
+# ~/bin/parallel -j 32 --rpl '{..} 1 $_=$job->slot()-1' taskset -c {..} {} ::: $DIR/runSingleIncrementalExperiment ::: $zipFile :::: problemList.txt ::: MpC-e ::: '-r 0.5' ::: cominisatps2sun_nopre
+# ~/bin/parallel -j 32 --rpl '{..} 1 $_=$job->slot()-1' taskset -c {..} {} ::: $DIR/runSingleIncrementalExperiment ::: $zipFile :::: problemList.txt ::: MpC-e ::: '-n' ::: cominisatps2sun_nopre
+# ~/bin/parallel -j 32 --rpl '{..} 1 $_=$job->slot()-1' taskset -c {..} {} ::: $DIR/runSingleIncrementalExperiment ::: $zipFile :::: problemList.txt ::: MpC-e ::: '-s' ::: cominisatps2sun_nopre
+
+# ~/bin/parallel -j 32 --rpl '{..} 1 $_=$job->slot()-1' taskset -c {..} {} ::: $DIR/runSingleIncrementalExperiment ::: $zipFile :::: problemList.txt ::: MpC-e ::: '--icaps2017 -r 0.5' ::: heuristical
+# ~/bin/parallel -j 32 --rpl '{..} 1 $_=$job->slot()-1' taskset -c {..} {} ::: $DIR/runSingleIncrementalExperiment ::: $zipFile :::: problemList.txt ::: MpC-e ::: '--icaps2017 -n' ::: heuristical
+# ~/bin/parallel -j 32 --rpl '{..} 1 $_=$job->slot()-1' taskset -c {..} {} ::: $DIR/runSingleIncrementalExperiment ::: $zipFile :::: problemList.txt ::: MpC-e ::: '--icaps2017 -s' ::: heuristical
+
+# ~/bin/parallel -j 32 --rpl '{..} 1 $_=$job->slot()-1' taskset -c {..} {} ::: $DIR/runSingleIncrementalExperiment ::: $zipFile :::: problemList.txt ::: MpC-e ::: '--icaps2017 -r 0.5' ::: cominisatps2sun_nopre
+# ~/bin/parallel -j 32 --rpl '{..} 1 $_=$job->slot()-1' taskset -c {..} {} ::: $DIR/runSingleIncrementalExperiment ::: $zipFile :::: problemList.txt ::: MpC-e ::: '--icaps2017 -n' ::: cominisatps2sun_nopre
+# ~/bin/parallel -j 32 --rpl '{..} 1 $_=$job->slot()-1' taskset -c {..} {} ::: $DIR/runSingleIncrementalExperiment ::: $zipFile :::: problemList.txt ::: MpC-e ::: '--icaps2017 -s' ::: cominisatps2sun_nopre
+
+## Multiple parallel calls:
+# ~/bin/parallel -j 32 --shuf --rpl '{..} 1 $_=$job->slot()-1' taskset -c {..} {} ::: $DIR/runSingleIncrementalExperiment ::: $zipFile :::: problemList.txt ::: MpC-e ::: r0.5 ::: cominisatps2sun_nopre
+# ~/bin/parallel -j 32 --shuf --rpl '{..} 1 $_=$job->slot()-1' taskset -c {..} {} ::: $DIR/runSingleIncrementalExperiment ::: $zipFile :::: problemList.txt ::: MpC-a ::: r0.5 ::: cominisatps2sun_nopre
+# ~/bin/parallel -j 32 --shuf --rpl '{..} 1 $_=$job->slot()-1' taskset -c {..} {} ::: $DIR/runSingleIncrementalExperiment ::: $zipFile :::: problemList.txt ::: Srt-e ::: r0.5 ::: cominisatps2sun_nopre
+# ~/bin/parallel -j 32 --shuf --rpl '{..} 1 $_=$job->slot()-1' taskset -c {..} {} ::: $DIR/runSingleIncrementalExperiment ::: $zipFile :::: problemList.txt ::: Srt-r ::: r0.5 ::: cominisatps2sun_nopre
+
+# ~/bin/parallel -j 32 --shuf --rpl '{..} 1 $_=$job->slot()-1' taskset -c {..} {} ::: $DIR/runSingleIncrementalExperiment ::: $zipFile :::: problemList.txt ::: MpC-e ::: n ::: cominisatps2sun_nopre
+# ~/bin/parallel -j 32 --shuf --rpl '{..} 1 $_=$job->slot()-1' taskset -c {..} {} ::: $DIR/runSingleIncrementalExperiment ::: $zipFile :::: problemList.txt ::: MpC-a ::: n ::: cominisatps2sun_nopre
+# ~/bin/parallel -j 32 --shuf --rpl '{..} 1 $_=$job->slot()-1' taskset -c {..} {} ::: $DIR/runSingleIncrementalExperiment ::: $zipFile :::: problemList.txt ::: Srt-e ::: n ::: cominisatps2sun_nopre
+# ~/bin/parallel -j 32 --shuf --rpl '{..} 1 $_=$job->slot()-1' taskset -c {..} {} ::: $DIR/runSingleIncrementalExperiment ::: $zipFile :::: problemList.txt ::: Srt-r ::: n ::: cominisatps2sun_nopre
+
+# ~/bin/parallel -j 32 --shuf --rpl '{..} 1 $_=$job->slot()-1' taskset -c {..} {} ::: $DIR/runSingleIncrementalExperiment ::: $zipFile :::: problemList.txt ::: MpC-e ::: s ::: cominisatps2sun_nopre
+# ~/bin/parallel -j 32 --shuf --rpl '{..} 1 $_=$job->slot()-1' taskset -c {..} {} ::: $DIR/runSingleIncrementalExperiment ::: $zipFile :::: problemList.txt ::: MpC-a ::: s ::: cominisatps2sun_nopre
+# ~/bin/parallel -j 32 --shuf --rpl '{..} 1 $_=$job->slot()-1' taskset -c {..} {} ::: $DIR/runSingleIncrementalExperiment ::: $zipFile :::: problemList.txt ::: Srt-e ::: s ::: cominisatps2sun_nopre
+# ~/bin/parallel -j 32 --shuf --rpl '{..} 1 $_=$job->slot()-1' taskset -c {..} {} ::: $DIR/runSingleIncrementalExperiment ::: $zipFile :::: problemList.txt ::: Srt-r ::: s ::: cominisatps2sun_nopre
+
+# ## Madagascar call, must be seperate
+# ~/bin/parallel -j 32 --shuf --rpl '{..} 1 $_=$job->slot()-1' taskset -c {..} {} ::: $DIR/runSingleMadagascar ::: $zipFile :::: problemList.txt ::: P
+~/bin/parallel -j 32 --shuf --rpl '{..} 1 $_=$job->slot()-1' taskset -c {..} {} ::: $DIR/runSingleMadagascar ::: $zipFile :::: problemList.txt ::: M
+
+echo "could complete" > completeFile

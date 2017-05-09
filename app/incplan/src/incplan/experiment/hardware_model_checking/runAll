@@ -1,0 +1,7 @@
+#!/bin/bash
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+zipFile="$1"
+unzip -Z1 $zipFile | grep ".srt" > problemList.txt
+
+~/bin/parallel -j 16 --rpl '{..} 1 $_=$job->slot()-1' taskset -c {..} {} ::: $DIR/runSingle ::: $zipFile :::: problemList.txt ::: cominisatps2sun_nopre ::: '-r 0.5' '-s' '-n'

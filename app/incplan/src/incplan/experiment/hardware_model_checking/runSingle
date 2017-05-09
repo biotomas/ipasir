@@ -1,0 +1,24 @@
+#!/bin/bash
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+zipFile="$1"
+problemFile="$2"
+solver="$3"
+option="$4"
+
+solver="$DIR/../../bin/incplan-${solver}"
+
+mkdir -p "$problemFile/$option"
+cd "$problemFile/$option"
+
+printf $DIR/runSingle > result
+for i in "$@"; do
+	printf \ \'"$i"\' >> result
+done
+printf \\n >> result
+
+unzip -p $zipFile $problemFile > problem.srt
+
+cmd="$solver problem.srt $option"
+/usr/bin/time -f 'completeTime=%e %S %U' bash -c "ulimit -St 300 -Sv 8388608; $cmd" &>> result
+rm problem.srt

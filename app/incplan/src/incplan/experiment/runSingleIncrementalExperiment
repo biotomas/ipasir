@@ -1,0 +1,97 @@
+#!/bin/bash
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+zipFile="$1"
+problemFile="$2"
+tool="$3"
+option="$4"
+solver="$5"
+
+folder="$(dirname $problemFile)"
+parentDirectory="$(dirname $folder)"
+
+problem="$(basename $problemFile)"
+problem="${problem%.*}"
+
+domain="$(basename $folder)"
+track="$(basename $parentDirectory)"
+
+domainFile="$folder/domain.pddl"
+domainFile2="${folder}/domain_${problem}.pddl"
+
+
+conf="${solver}_${tool}_${option}"
+solver="$DIR/../bin/incplan-${solver}"
+
+case $tool in
+	"MpC-e")
+	#exist
+	tool="$DIR/runMadagascar"
+	toolOption="-P 2"
+	;;
+	"MpC-a")
+	#forall
+	tool="$DIR/runMadagascar"
+	toolOption="-P 1"
+	;;
+	"MpC-s")
+	#sequential
+	tool="$DIR/runMadagascar"
+	toolOption="-P 0"
+	;;
+	"Srt-e")
+	tool="$DIR/runSrt"
+	toolOption="exist"
+	;;
+	"Srt-r")
+	tool="$DIR/runSrt"
+	toolOption="reinforced"
+	;;
+	"Srt-s")
+	tool="$DIR/runSrt"
+	toolOption="selective"
+	;;
+	*)
+	echo "unnown tool: >$tool<"
+	exit 1
+	;;
+esac
+
+case $option in
+	"n")
+	option="-n"
+	;;
+	"s")
+	option="-s"
+	;;
+	"r1")
+	option="-r 1"
+	;;
+	"r0.5")
+	option="-r 0.5"
+	;;
+	"r0.5-S5")
+	option="-r 0.5 -S 5"
+	;;
+	*)
+#	echo "unnown option: $option"
+#	exit 1
+	;;
+esac
+
+mkdir -p "$track/$domain/$problem/$conf"
+cd "$track/$domain/$problem/$conf"
+touch result
+
+unzip -p $zipFile $domainFile > domain.pddl
+#if empty use alternate location
+if [ ! -s domain.pddl ] ; then
+	unzip -p $zipFile $domainFile2 > domain.pddl
+fi
+unzip -p $zipFile $problemFile > problem.pddl
+
+echo "$DIR/runSingleIncrementalExperiment $@" > result
+
+cmd="$tool problem.pddl $toolOption :: $solver $option"
+/usr/bin/time -f 'completeTime=%e %S %U' bash -c "ulimit -St 300; $cmd" &>> result
+#rm -f domain.pddl problem.pddl output.sas problem.in problem.in.cnf problem.out problem.out.all gmon.out

@@ -1,0 +1,36 @@
+1) Viewing the benchmark results
+To view the benchmark results you need jupyter notebook. The resultAnalysis.ipynb file contains all scripts used to evaluate the colleted result data icaps17-benchmark.txt.
+
+2) Reproduce the experiments from the icaps 2017 paper
+
+To reproduce the experiment make sure to check out commit f951c76b5cf97bf96.
+
+2.1) Planning Tools
+2.1.1) Madgascar
+Get madagascar from https://users.ics.aalto.fi/rintanen/satplan.html the February 25, 2015 version of the source code was used.
+
+Apply the patch provided (./madagascarPatch.diff) and compile madagascar. Then move MpC to the bin directory of this repository.
+
+2.1.2) Freelunch
+Is already provided in this repository. (bin/srt.jar)
+
+2.2) Sat solver
+Get the incremental sat solvers from the 2016 SAT competition:
+http://baldur.iti.kit.edu/sat-competition-2016/downloads/incremental.zip
+
+compile the cominisatps2sun_nopre solver and copy libipasircominisatps2sun_nopre.a to lib/ipasir/
+
+now compile incplan:
+cd incplan/build
+make
+
+2.3) Planning Domains
+Get the planning problems zip files from the 2014 IPC:
+https://helios.hud.ac.uk/scommv/IPC-14/repository/benchmarksV1.1.zip
+
+2.4) Running the Benchmarks
+Run:
+experiment/icaps17/runExperiment [pathToPlanningZip]
+experiment/icaps17/collectData
+
+You should now have a collectedData.txt, which can be analyzed with the jupyter notebook (see 1)

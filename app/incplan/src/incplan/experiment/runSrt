@@ -1,0 +1,49 @@
+#!/bin/bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+srt="java -Xmx8G -jar $DIR/../bin/srt.jar"
+
+i=0
+splitPoint=0
+for param in "$@"
+do
+i=$((i + 1))
+case $param in
+	::)
+		splitPoint=$i
+		;;
+esac
+done
+
+problem="${@:1:1}"
+domain="$( dirname "${problem}" )/domain.pddl"
+
+$DIR/../../fast-downward/src/translate/translate.py $domain $problem
+problem="output.sas"
+
+if [ $splitPoint != 0 ]; then
+	srtArgs="${@:2:$((splitPoint - 2))}"
+	incplanArgs="${@:$((splitPoint + 1))}"
+
+	incplanInput="problem.in"
+	incplanOutput="problem.out"
+
+	cmd="$srt $srtArgs $problem > $incplanInput"
+	echo $cmd
+	eval $cmd
+
+	cmd="$incplanArgs $incplanInput > ${incplanOutput}.all"
+	echo $cmd
+	/usr/bin/time -f "solvingTime=%e %S %U" bash -c "ulimit -Sv 8388608; $cmd"
+
+	if [ "$?" -eq 0 ]; then
+		grep '^ci' "${incplanOutput}.all"
+		grep -v '^c' ${incplanOutput}.all | grep -v -e '^$' > $incplanOutput
+		cmd="$srt check $srtArgs $problem $incplanOutput"
+		echo $cmd
+		eval $cmd
+	fi
+
+else
+	echo "Srt cant solve problems alone please provide incplan"
+fi
