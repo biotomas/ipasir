@@ -1,0 +1,40 @@
+This benchmark solves planning problems incrementally. Each instance of a
+planning problem can be described as:
+
+- initial clauses I: satisfied in the initial statet t[0]
+- goal clauses G: satisfied in the goal state t[i]
+- universal clauses U: satisfied at every time point t[k]
+- transition clauses T : satisfied at each pair of consecutive time point t[k],
+t[k+1]
+
+The instances have been generated from a subset of the benchmarks of the
+Planning Competition (IPC) 2014 with help of a modified version of the planner
+madagascar [1,3].
+
+The problems are encoded using the double ended incremental encoding. Details
+can be found in [2].
+
+
+
+The software is available via GitHub [4].
+
+Stephan Gocht
+stephan.gocht@student.kit.edu
+09.05.2017
+
+[1] Planning as satisfiability: parallel plans and algorithms for plan search,
+Rintanen, J.; Heljanko, K.; and Niemelä, I., 2006 Artificial Intelligence
+
+[2] Accelerating SAT Based Planning with Incremental SAT Solving, Stephan Gocht
+and Tomas Balyo, 2017 The 27th International Conference on Automated Planning
+and Scheduling
+
+[3] https://users.ics.aalto.fi/rintanen/satplan.html
+
+[4] Latest:
+https://github.com/StephanGocht/incplan
+
+Based on Commit:
+9413714018436313b606b986f373a15ba612e8f2
+https://github.com/StephanGocht/incplan/tree/9413714018436313b606b986f373a15ba612e8f2
+
