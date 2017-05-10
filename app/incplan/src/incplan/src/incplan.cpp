@@ -240,8 +240,8 @@ class Solver : public TimePointBasedSolver {
 			TimePointBasedSolver(
 				problem->numberLiteralsPerTime,
 				1,
-				//std::make_unique<ipasir::Solver>(),
-				std::make_unique<ipasir::RandomizedSolver>(std::make_unique<ipasir::Solver>()),
+				std::make_unique<ipasir::Solver>(),
+				//std::make_unique<ipasir::RandomizedSolver>(std::make_unique<ipasir::Solver>()),
 				options.icaps2017Version?
 					TimePointBasedSolver::HelperVariablePosition::AllBefore:
 					TimePointBasedSolver::HelperVariablePosition::SingleAfter){
