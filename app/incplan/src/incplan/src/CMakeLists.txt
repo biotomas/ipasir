@@ -38,7 +38,7 @@ set(SRC_FILES
 
 add_library(ipasir_wrapper libs/ipasir/ipasir_cpp.cpp)
 add_library(ipasir_wrapper_extended libs/ipasir/ipasir_cpp.cpp)
-target_compile_definitions(ipasir_wrapper_extended PRIVATE USE_EXTENDED_IPASIR=1)
+target_compile_definitions(ipasir_wrapper_extended PRIVATE USE_EXTENDED_IPASIR=0)
 
 # === Target: all_sources ===
 
