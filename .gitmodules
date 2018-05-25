@@ -1,0 +1,3 @@
+[submodule "sat/lawa"]
+	path = sat/lawa
+	url = https://github.com/biotomas/lawa.git
