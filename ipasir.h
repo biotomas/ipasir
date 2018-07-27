@@ -62,12 +62,26 @@ void ipasir_assume (void * solver, int lit);
  * If the formula is satisfiable the function returns 10 and the state of the solver is changed to SAT.
  * If the formula is unsatisfiable the function returns 20 and the state of the solver is changed to UNSAT.
  * If the search is interrupted (see ipasir_set_terminate) the function returns 0 and the state of the solver remains INPUT.
- * This function can be called in any defined state of the solver.
+ * This function can be called in any defined state of the solver, except the function ipasir_solve_final has been called before.
  *
  * Required state: INPUT or SAT or UNSAT
  * State after: INPUT or SAT or UNSAT
  */
 int ipasir_solve (void * solver);
+
+/**
+ * Solve the formula with specified clauses under the specified assumptions.
+ * If the formula is satisfiable the function returns 10 and the state of the solver is changed to SAT.
+ * If the formula is unsatisfiable the function returns 20 and the state of the solver is changed to UNSAT.
+ * If the search is interrupted (see ipasir_set_terminate) the function returns 0 and the state of the solver remains INPUT.
+ * This function can be called in any defined state of the solver.
+ *
+ * After this function was called, the solver state is unsafe to be used with further calls to ipasir_solve.
+ *
+ * Required state: INPUT or SAT or UNSAT
+ * State after: SAT_NOSOLVE or UNSAT_NOSOLVE
+ */
+int ipasir_solve_final (void * solver);
 
 /**
  * Get the truth value of the given literal in the found satisfying
