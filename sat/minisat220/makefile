@@ -62,6 +62,7 @@ libipasir$(SIG).a: .FORCE
 	@#
 	sed -i -e 's,"\([=|]\),"c [${SIG}] \1,' $(DIR)/minisat/core/Main.cc
 	sed -i -e 's,"\([=|]\),"c [${SIG}] \1,' $(DIR)/minisat/core/Solver.cc
+	sed -i -e 's,"\([=|]\),"c [${SIG}] \1,' $(DIR)/minisat/simp/SimpSolver.cc
 	@#
 	@# configure and build library
 	@#
@@ -83,7 +84,8 @@ libipasir$(SIG).a: .FORCE
 ipasir$(NAME)glue.o: ipasir$(NAME)glue.cc ipasir.h makefile
 	$(CXX) $(CXXFLAGS) \
 	  -DVERSION=\"$(VERSION)\" \
-	  -I$(DIR) -I$(DIR)/minisat/core -c ipasir$(NAME)glue.cc
+	  -I$(DIR) -I$(DIR)/minisat/core \
+	  -I$(DIR)/minisat/simp -c ipasir$(NAME)glue.cc
 
 #-----------------------------------------------------------------------#
 

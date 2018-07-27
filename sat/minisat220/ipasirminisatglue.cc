@@ -6,7 +6,7 @@
  */
 #define __STDC_LIMIT_MACROS
 #define __STDC_FORMAT_MACROS
-#include "Solver.h"
+#include "SimpSolver.h"
 
 #include <cassert>
 #include <cstdio>
@@ -31,7 +31,7 @@ static double getime (void) {
 }
 };
 
-class IPAsirMiniSAT : public Solver {
+class IPAsirMiniSAT : public SimpSolver {
   vec<Lit> assumptions, clause;
   int szfmap; unsigned char * fmap; bool nomodel;
   unsigned long long calls;
@@ -68,13 +68,17 @@ public:
     nomodel = true;
     assumptions.push (import (lit));
   }
-  int solve () {
+  int solve (bool simp = false) {
     calls++;
     reset ();
-    lbool res = solveLimited (assumptions);
+    lbool res = solveLimited (assumptions, simp);
     assumptions.clear ();
     nomodel = (res != l_True);
     return (res == l_Undef) ? 0 : (res == l_True ? 10 : 20);
+  }
+  int solve_final () {
+    // allow simplification, in case we did not call the solver so far
+    return solve (calls == 0);
   }
   int val (int lit) {
     if (nomodel) return 0;
@@ -115,6 +119,7 @@ const char * ipasir_signature () { return sig; }
 void * ipasir_init () { return new IPAsirMiniSAT (); }
 void ipasir_release (void * s) { import (s)->stats (); delete import (s); }
 int ipasir_solve (void * s) { return import (s)->solve (); }
+int ipasir_solve_final (void * s) { return import (s)->solve_final (); }
 void ipasir_add (void * s, int l) { import (s)->add (l); }
 void ipasir_assume (void * s, int l) { import (s)->assume (l); }
 int ipasir_val (void * s, int l) { return import (s)->val (l); }
