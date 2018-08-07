@@ -19,7 +19,7 @@ IPASIRSOLVER	?= picosat961
 # a specific compiler or specific compile flags.
 #--------------------------------------------------------------------------#
 
-CC	=	g++-4.8
+CC	=	g++
 CFLAGS	?=	-Wall -DNDEBUG -O3 -std=c++0x
 
 DEPS	=	../../sat/$(IPASIRSOLVER)/libipasir$(IPASIRSOLVER).a
