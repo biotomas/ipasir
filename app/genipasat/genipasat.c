@@ -139,7 +139,11 @@ int main (int argc, char ** argv) {
   if (closefile == 2) pclose (file);
   if (closefile == 1) fclose (file);
   msg ("calling SAT solver after %.2f seconds", getime ());
+#if defined(IPASIR_VERSION) && IPASIR_VERSION >= 3
+  res = ipasir_solve_final (solver);
+#else
   res = ipasir_solve (solver);
+#endif
   msg ("SAT solver returns %d after %.2f seconds", res, getime ());
   fflush (stderr);
   if (res == 10) {
