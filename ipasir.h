@@ -4,6 +4,14 @@
 #ifndef ipasir_h_INCLUDED
 #define ipasir_h_INCLUDED
 
+/* Depending on the version of the interface, certain functions might not be
+ * supported by the SAT backend that implements the interface. Therefore, allow
+ * to control the version to be used via a macro.
+ */
+#ifndef IPASIR_VERSION
+#define IPASIR_VERSION 3
+#endif
+
 /**
  * Return the name and the version of the incremental SAT
  * solving library.
@@ -69,6 +77,7 @@ void ipasir_assume (void * solver, int lit);
  */
 int ipasir_solve (void * solver);
 
+#if defined(IPASIR_VERSION) && IPASIR_VERSION >= 3
 /**
  * Solve the formula with specified clauses under the specified assumptions.
  * If the formula is satisfiable the function returns 10 and the state of the solver is changed to SAT.
@@ -82,6 +91,7 @@ int ipasir_solve (void * solver);
  * State after: SAT_NOSOLVE or UNSAT_NOSOLVE
  */
 int ipasir_solve_final (void * solver);
+#endif /* IPASIR_VERSION >= 3 */
 
 /**
  * Get the truth value of the given literal in the found satisfying
@@ -123,6 +133,7 @@ int ipasir_failed (void * solver, int lit);
  */
 void ipasir_set_terminate (void * solver, void * state, int (*terminate)(void * state));
 
+#if defined(IPASIR_VERSION) && IPASIR_VERSION >= 2
 /**
  * Set a callback function used to extract learned clauses up to a given length from the
  * solver. The solver will call this function for each learned clause that satisfies
@@ -138,5 +149,6 @@ void ipasir_set_terminate (void * solver, void * state, int (*terminate)(void * 
  * State after: INPUT or SAT or UNSAT
  */
 void ipasir_set_learn (void * solver, void * state, int max_length, void (*learn)(void * state, int * clause));
+#endif /* IPASIR_VERSION >= 2 */
 
 #endif
