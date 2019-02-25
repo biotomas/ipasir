@@ -4,6 +4,48 @@
 #ifndef ipasir_h_INCLUDED
 #define ipasir_h_INCLUDED
 
+/*
+ * In this header, the macro IPASIR_API is defined as follows:
+ * - if IPASIR_SHARED_LIB is not defined, then IPASIR_API is defined, but empty.
+ * - if IPASIR_SHARED_LIB is defined...
+ *    - ...and if BUILDING_IPASIR_SHARED_LIB is not defined, IPASIR_API is
+ *      defined to contain symbol visibility attributes for importing symbols
+ *      of a DSO (including the __declspec rsp. __attribute__ keywords).
+ *    - ...and if BUILDING_IPASIR_SHARED_LIB is defined, IPASIR_API is defined
+ *      to contain symbol visibility attributes for exporting symbols from a
+ *      DSO (including the __declspec rsp. __attribute__ keywords).
+ */
+
+#if defined(IPASIR_SHARED_LIB)
+    #if defined(_WIN32) || defined(__CYGWIN__)
+        #if defined(BUILDING_IPASIR_SHARED_LIB)
+            #if defined(__GNUC__)
+                #define IPASIR_API __attribute__((dllexport))
+            #elif defined(_MSC_VER)
+                #define IPASIR_API __declspec(dllexport)
+            #endif
+        #else
+            #if defined(__GNUC__)
+                #define IPASIR_API __attribute__((dllimport))
+            #elif defined(_MSC_VER)
+                #define IPASIR_API __declspec(dllimport)
+            #endif
+        #endif
+    #elif defined(__GNUC__)
+        #define IPASIR_API __attribute__((visibility("default")))
+    #endif
+
+    #if !defined(IPASIR_API)
+        #if !defined(IPASIR_SUPPRESS_WARNINGS)
+            #warning "Unknown compiler. Not adding visibility information to IPASIR symbols."
+            #warning "Define IPASIR_SUPPRESS_WARNINGS to suppress this warning."
+        #endif
+        #define IPASIR_API
+    #endif
+#else
+    #define IPASIR_API
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -12,7 +54,7 @@ extern "C" {
  * Return the name and the version of the incremental SAT
  * solving library.
  */
-const char * ipasir_signature ();
+IPASIR_API const char * ipasir_signature ();
 
 /**
  * Construct a new solver and return a pointer to it.
@@ -22,7 +64,7 @@ const char * ipasir_signature ();
  * Required state: N/A
  * State after: INPUT
  */
-void * ipasir_init ();
+IPASIR_API void * ipasir_init ();
 
 /**
  * Release the solver, i.e., all its resoruces and
@@ -32,7 +74,7 @@ void * ipasir_init ();
  * Required state: INPUT or SAT or UNSAT
  * State after: undefined
  */
-void ipasir_release (void * solver);
+IPASIR_API void ipasir_release (void * solver);
 
 /**
  * Add the given literal into the currently added clause
@@ -49,7 +91,7 @@ void ipasir_release (void * solver);
  * negation overflow).  This applies to all the literal
  * arguments in API functions.
  */
-void ipasir_add (void * solver, int lit_or_zero);
+IPASIR_API void ipasir_add (void * solver, int lit_or_zero);
 
 /**
  * Add an assumption for the next SAT search (the next call
@@ -59,7 +101,7 @@ void ipasir_add (void * solver, int lit_or_zero);
  * Required state: INPUT or SAT or UNSAT
  * State after: INPUT
  */
-void ipasir_assume (void * solver, int lit);
+IPASIR_API void ipasir_assume (void * solver, int lit);
 
 /**
  * Solve the formula with specified clauses under the specified assumptions.
@@ -71,7 +113,7 @@ void ipasir_assume (void * solver, int lit);
  * Required state: INPUT or SAT or UNSAT
  * State after: INPUT or SAT or UNSAT
  */
-int ipasir_solve (void * solver);
+IPASIR_API int ipasir_solve (void * solver);
 
 /**
  * Get the truth value of the given literal in the found satisfying
@@ -83,7 +125,7 @@ int ipasir_solve (void * solver);
  * Required state: SAT
  * State after: SAT
  */
-int ipasir_val (void * solver, int lit);
+IPASIR_API int ipasir_val (void * solver, int lit);
 
 /**
  * Check if the given assumption literal was used to prove the
@@ -96,7 +138,7 @@ int ipasir_val (void * solver, int lit);
  * Required state: UNSAT
  * State after: UNSAT
  */
-int ipasir_failed (void * solver, int lit);
+IPASIR_API int ipasir_failed (void * solver, int lit);
 
 /**
  * Set a callback function used to indicate a termination requirement to the
@@ -111,7 +153,7 @@ int ipasir_failed (void * solver, int lit);
  * Required state: INPUT or SAT or UNSAT
  * State after: INPUT or SAT or UNSAT
  */
-void ipasir_set_terminate (void * solver, void * state, int (*terminate)(void * state));
+IPASIR_API void ipasir_set_terminate (void * solver, void * state, int (*terminate)(void * state));
 
 /**
  * Set a callback function used to extract learned clauses up to a given length from the
@@ -127,7 +169,7 @@ void ipasir_set_terminate (void * solver, void * state, int (*terminate)(void * 
  * Required state: INPUT or SAT or UNSAT
  * State after: INPUT or SAT or UNSAT
  */
-void ipasir_set_learn (void * solver, void * state, int max_length, void (*learn)(void * state, int * clause));
+IPASIR_API void ipasir_set_learn (void * solver, void * state, int max_length, void (*learn)(void * state, int * clause));
 
 #ifdef __cplusplus
 } // closing extern "C"
