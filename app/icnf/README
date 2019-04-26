@@ -1,0 +1,4 @@
+Very simple stand-alone SAT solver which in essence is just a parser.
+
+You might want to read the comments in 'makefile' carefully if you want
+to adapt this applications to your own needs.
