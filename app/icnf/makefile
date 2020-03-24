@@ -26,6 +26,7 @@ DEPS	=	../../sat/$(IPASIRSOLVER)/libipasir$(IPASIRSOLVER).a
 
 LIBS	=	-L../../sat/$(IPASIRSOLVER)/ -lipasir$(IPASIRSOLVER)
 LIBS	+=	$(shell cat ../../sat/$(IPASIRSOLVER)/LIBS 2>/dev/null)
+LIBS    +=  -lm
 
 LINK	=	$(shell	if [ -f ../../sat/$(IPASIRSOLVER)/LINK ]; \
 			then \
