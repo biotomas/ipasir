@@ -1,3 +1,10 @@
+Integrated a couple of patches into minisat-220.tar.gz in order to increase compatibilty. 
+The additional patches/commits can be retraced here: https://github.com/Udopia/minisat/. 
+
+Markus Iser
+24-03-2020
+
+
 This is MiniSAT Version 2.2.0, directly obtained from 'github' on December 19, 2014.
 Then I have just unpacked the 'minisat-master.zip' file renamed the directory to
 'minisat-220' to match the 'picosat' package name format and produced a
