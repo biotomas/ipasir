@@ -4,7 +4,7 @@
  
  Solver::Solver() :
  
-+    termCallback (NULL), learnCallback (NULL), learnCallbackBuffer (NULL)
++    termCallback (NULL), learnCallbackBuffer (NULL), learnCallback (NULL)
      // Parameters (user settable):
      //
 -    verbosity        (0)
