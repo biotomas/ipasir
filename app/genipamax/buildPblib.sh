@@ -14,9 +14,8 @@ checkbin () {
   die "execution of '$1 $2' failed ('$1' required)"
 }
 
-cpp11=`cat C++11`
 checkbin tar --help
-checkbin $cpp11 --version
+checkbin g++ --version
 checkbin cmake --version
 
 if [ -d pblib ]
@@ -26,13 +25,12 @@ then
 fi
 
 msg "Unpacking PBLib"
-mkdir pblib
-tar xvf pblib.tgz -C pblib
-
-cd pblib
-sed -i 's/"g++"/"'$cpp11'"/g' CMakeLists.txt
+#mkdir pblib
+#tar xvf pblib.tgz -C pblib
+tar xvf pblib.tar.gz
 
 msg "Building PBLib"
+cd pblib
 cmake -Wno-dev .
 make
 cd ..
