@@ -1,3 +1,4 @@
+```
 ipasir.h          reentrant incremental sat solver API (reverse)
 
 makefile          with goals 'all' and 'clean'
@@ -15,6 +16,7 @@ app/README        explains the apps directory
 
 LICENSE           generic license for parts of this software not
                   explicitly covered by its own license restrictions,
-		  which can be found in the corresponding LICENSE or
-		  COPYRIGHT file in a sub directory or in a distribution
-		  package, such as in an included tar or zip file
+                  which can be found in the corresponding LICENSE or
+                  COPYRIGHT file in a sub directory or in a distribution
+                  package, such as in an included tar or zip file
+```
