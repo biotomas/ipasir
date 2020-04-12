@@ -135,6 +135,9 @@ IPASIR_API int ipasir_val (void * solver, int lit);
  * no ipasir_add or ipasir_assume has been called since then, i.e.,
  * the state of the solver is UNSAT.
  *
+ * Note that for literals 'lit' which are not assumption literals, 
+ * the behavior of 'ipasir_failed(lit)' is not specified. 
+ *
  * Required state: UNSAT
  * State after: UNSAT
  */
