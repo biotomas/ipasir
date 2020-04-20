@@ -148,23 +148,23 @@ IPASIR_API int ipasir_failed (void * solver, int lit);
  * solver. The solver will periodically call this function and check its return
  * value during the search. The ipasir_set_terminate function can be called in any
  * state of the solver, the state remains unchanged after the call.
- * The callback function is of the form "int terminate(void * state)"
+ * The callback function is of the form "int terminate(void * data)"
  *   - it returns a non-zero value if the solver should terminate.
- *   - the solver calls the callback function with the parameter "state"
+ *   - the solver calls the callback function with the parameter "data"
  *     having the value passed in the ipasir_set_terminate function (2nd parameter).
  *
  * Required state: INPUT or SAT or UNSAT
  * State after: INPUT or SAT or UNSAT
  */
-IPASIR_API void ipasir_set_terminate (void * solver, void * state, int (*terminate)(void * state));
+IPASIR_API void ipasir_set_terminate (void * solver, void * data, int (*terminate)(void * data));
 
 /**
  * Set a callback function used to extract learned clauses up to a given length from the
  * solver. The solver will call this function for each learned clause that satisfies
  * the maximum length (literal count) condition. The ipasir_set_learn function can be called in any
  * state of the solver, the state remains unchanged after the call.
- * The callback function is of the form "void learn(void * state, int * clause)"
- *   - the solver calls the callback function with the parameter "state"
+ * The callback function is of the form "void learn(void * data, int * clause)"
+ *   - the solver calls the callback function with the parameter "data"
  *     having the value passed in the ipasir_set_learn function (2nd parameter).
  *   - the argument "clause" is a pointer to a null terminated integer array containing the learned clause.
  *     the solver can change the data at the memory location that "clause" points to after the function call.
@@ -172,7 +172,7 @@ IPASIR_API void ipasir_set_terminate (void * solver, void * state, int (*termina
  * Required state: INPUT or SAT or UNSAT
  * State after: INPUT or SAT or UNSAT
  */
-IPASIR_API void ipasir_set_learn (void * solver, void * state, int max_length, void (*learn)(void * state, int * clause));
+IPASIR_API void ipasir_set_learn (void * solver, void * data, int max_length, void (*learn)(void * data, int * clause));
 
 #ifdef __cplusplus
 } // closing extern "C"
