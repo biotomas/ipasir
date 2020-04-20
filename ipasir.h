@@ -107,8 +107,9 @@ IPASIR_API void ipasir_assume (void * solver, int lit);
  * Solve the formula with specified clauses under the specified assumptions.
  * If the formula is satisfiable the function returns 10 and the state of the solver is changed to SAT.
  * If the formula is unsatisfiable the function returns 20 and the state of the solver is changed to UNSAT.
- * If the search is interrupted (see ipasir_set_terminate) the function returns 0 and the state of the solver remains INPUT.
- * This function can be called in any defined state of the solver.
+ * If the search is interrupted (see ipasir_set_terminate) the function returns 0 and the state of the solver is changed to INPUT.
+ * This function can be called in any defined state of the solver. 
+ * Note that the state of the solver _during_ execution of 'ipasir_solve' is undefined. 
  *
  * Required state: INPUT or SAT or UNSAT
  * State after: INPUT or SAT or UNSAT
