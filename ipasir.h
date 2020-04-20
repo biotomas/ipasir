@@ -131,12 +131,13 @@ IPASIR_API int ipasir_val (void * solver, int lit);
  * Check if the given assumption literal was used to prove the
  * unsatisfiability of the formula under the assumptions
  * used for the last SAT search. Return 1 if so, 0 otherwise.
+ * 
+ * The formula remains unsatisfiable even just under assumption literals for which ipasir_failed() returns 1. 
+ * Note that for literals 'lit' which are not assumption literals, the behavior of 'ipasir_failed(lit)' is not specified. 
+ * 
  * This function can only be used if ipasir_solve has returned 20 and
  * no ipasir_add or ipasir_assume has been called since then, i.e.,
  * the state of the solver is UNSAT.
- *
- * Note that for literals 'lit' which are not assumption literals, 
- * the behavior of 'ipasir_failed(lit)' is not specified. 
  *
  * Required state: UNSAT
  * State after: UNSAT
