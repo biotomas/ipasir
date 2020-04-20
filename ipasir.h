@@ -117,7 +117,10 @@ IPASIR_API int ipasir_solve (void * solver);
 
 /**
  * Get the truth value of the given literal in the found satisfying
- * assignment. Return 'lit' if True, '-lit' if False, and 0 if not important.
+ * assignment. Return 'lit' if True, '-lit' if False; 
+ * 'ipasir_val(lit)' may return '0' if the found assignment is satisfying for both valuations of lit. 
+ * Each solution that agrees with all non-zero values of ipasir_val() is a model of the formula. 
+ * 
  * This function can only be used if ipasir_solve has returned 10
  * and no 'ipasir_add' nor 'ipasir_assume' has been called
  * since then, i.e., the state of the solver is SAT.
