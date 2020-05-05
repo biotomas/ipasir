@@ -1,0 +1,4 @@
+./ipasir-check-iterative 100000 5 5000 # should be around 6 minutes
+./ipasir-check-iterative 200000 5 5000 # should be around 12 minutes
+./ipasir-check-iterative 300 3 300000 # should be around 1 minutes
+./ipasir-check-iterative 2000 5 30000 # should be around 1 minutes
