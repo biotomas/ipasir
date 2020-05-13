@@ -1,0 +1,17 @@
+A binary that calls a solver with a fixed formula many times with a full stack
+of assumption literals. The constructed formula has only a single solution.
+All further calls should result in no solution. Whenever a conflict is returned by
+the IPASIR solver, this conflict is added to the formula as well.
+As a full assumption stack is used, each single call to the solver is very simple,
+as all variables could be assigned right away and then the solution can be checked.
+The binary reports the calls per seconds that the solver could run.
+
+The binary takes 3 parameters: X Y Z
+
+X is the number of calls to be performed, where the signes of the literals in the assumption list correspond to the binary representation of the number of the call. Set bits correspond to negative literals.
+
+Y is the number of variables of a basic block in a formula. The basic block is encoded as all possible clauses over the given variables, except that the clause with all negative variables is not added to the formula (making the basic block satisfiable).
+
+Z is the number of basic blocks in the formula. Essentially, basic block number i starts with variable (i*Y)+1. Hence, the maximum variable of the formula is Y * Z.
+
+The maximum number of clauses in the formula is (2^Y - 1) * Z.

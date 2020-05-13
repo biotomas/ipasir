@@ -1,0 +1,4 @@
+A binary that tests the implementation of the learnt clause sharing
+of the ipasir interface. The binary takes 2 numbers as input, the maximum size
+of a clause to be shared, and a size of a conflict that might be triggered in
+the solver.
