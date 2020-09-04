@@ -24,14 +24,14 @@ void ipasir_release(void* solver) {
 	lglrelease((LGL*)solver);
 }
 
-void ipasir_add(void* solver, int lit) {
+void ipasir_add(void* solver, int32_t lit) {
 	if (lit != 0) {
 		lglfreeze((LGL*)solver, lit);
 	}
 	lgladd((LGL*)solver, lit);
 }
 
-void ipasir_assume(void* solver, int lit) {
+void ipasir_assume(void* solver, int32_t lit) {
 	lglfreeze((LGL*)solver, lit);
 	lglassume((LGL*)solver, lit);
 }
@@ -40,11 +40,11 @@ int ipasir_solve(void* solver) {
 	return lglsat((LGL*)solver);
 }
 
-int ipasir_val(void * solver, int var) {
+int ipasir_val(void * solver, int32_t var) {
 	return var*lglderef((LGL*)solver, var);
 }
 
-int ipasir_failed(void * solver, int lit) {
+int ipasir_failed(void * solver, int32_t lit) {
 	return lglfailed((LGL*)solver, lit);
 }
 
@@ -52,6 +52,6 @@ void ipasir_set_terminate(void * solver,  void * state, int (*terminate)(void * 
 	lglseterm((LGL*)solver, terminate, state);
 }
 
-void ipasir_set_learn (void * solver, void * state, int max_length, void (*learn)(void * state, int * clause)) {
+void ipasir_set_learn (void * solver, void * state, int max_length, void (*learn)(void * state, int32_t * clause)) {
 	//not implemented
 }
