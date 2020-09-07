@@ -20,17 +20,17 @@ void ipasir_release (void * solver) {
   picosat_reset (solver);
 }
 
-void ipasir_add (void * solver, int lit) { picosat_add (solver, lit); }
+void ipasir_add (void * solver, int32_t lit) { picosat_add (solver, lit); }
 
-void ipasir_assume (void * solver, int lit) { picosat_assume (solver, lit); }
+void ipasir_assume (void * solver, int32_t lit) { picosat_assume (solver, lit); }
 
 int ipasir_solve (void * solver) { return picosat_sat (solver, -1); }
 
-int ipasir_failed (void * solver, int lit) {
+int ipasir_failed (void * solver, int32_t lit) {
   return picosat_failed_assumption (solver, lit);
 }
 
-int ipasir_val (void * solver, int var) {
+int ipasir_val (void * solver, int32_t var) {
   int val = picosat_deref (solver, var);
   if (!val) return 0;
   return val < 0 ? -var : var;
@@ -44,5 +44,5 @@ ipasir_set_terminate (
 }
 
 /* Picosat does not implement clause sharing functionality */
-void ipasir_set_learn (void * solver, void * state, int max_length, void (*learn)(void * state, int * clause)) {}
+void ipasir_set_learn (void * solver, void * state, int max_length, void (*learn)(void * state, int32_t * clause)) {}
 

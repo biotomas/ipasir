@@ -36,7 +36,7 @@ class IPAsirMiniSAT : public Solver {
   int szfmap; unsigned char * fmap; bool nomodel;
   unsigned long long calls;
   void reset () { if (fmap) delete [] fmap, fmap = 0, szfmap = 0; }
-  Lit import (int lit) { 
+  Lit import (int32_t lit) {
     while (abs (lit) > nVars ()) (void) newVar ();
     return mkLit (Var (abs (lit) - 1), (lit < 0));
   }
@@ -57,13 +57,13 @@ public:
     verbosity = 1;
   }
   ~IPAsirMiniSAT () { reset (); }
-  void add (int lit) {
+  void add (int32_t lit) {
     reset ();
     nomodel = true;
     if (lit) clause.push (import (lit));
     else addClause (clause), clause.clear ();
   }
-  void assume (int lit) {
+  void assume (int32_t lit) {
     reset ();
     nomodel = true;
     assumptions.push (import (lit));
@@ -76,12 +76,12 @@ public:
     nomodel = (res != l_True);
     return (res == l_Undef) ? 0 : (res == l_True ? 10 : 20);
   }
-  int val (int lit) {
+  int val (int32_t lit) {
     if (nomodel) return 0;
     lbool res = modelValue (import (lit));
     return (res == l_True) ? lit : -lit;
   }
-  int failed (int lit) {
+  int failed (int32_t lit) {
     if (!fmap) ana ();
     int tmp = var (import (lit));
     assert (0 <= tmp && tmp < nVars ());
@@ -115,10 +115,10 @@ const char * ipasir_signature () { return sig; }
 void * ipasir_init () { return new IPAsirMiniSAT (); }
 void ipasir_release (void * s) { import (s)->stats (); delete import (s); }
 int ipasir_solve (void * s) { return import (s)->solve (); }
-void ipasir_add (void * s, int l) { import (s)->add (l); }
-void ipasir_assume (void * s, int l) { import (s)->assume (l); }
-int ipasir_val (void * s, int l) { return import (s)->val (l); }
-int ipasir_failed (void * s, int l) { return import (s)->failed (l); }
+void ipasir_add (void * s, int32_t l) { import (s)->add (l); }
+void ipasir_assume (void * s, int32_t l) { import (s)->assume (l); }
+int ipasir_val (void * s, int32_t l) { return import (s)->val (l); }
+int ipasir_failed (void * s, int32_t l) { return import (s)->failed (l); }
 void ipasir_set_terminate (void * s, void * state, int (*callback)(void * state)) { import(s)->setTermCallback(state, callback); }
-void ipasir_set_learn (void * s, void * state, int max_length, void (*learn)(void * state, int * clause)) { import(s)->setLearnCallback(state, max_length, learn); }
+void ipasir_set_learn (void * s, void * state, int max_length, void (*learn)(void * state, int32_t * clause)) { import(s)->setLearnCallback(state, max_length, learn); }
 };

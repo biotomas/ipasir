@@ -4,6 +4,8 @@
 #ifndef ipasir_h_INCLUDED
 #define ipasir_h_INCLUDED
 
+#include <stdint.h>
+
 /*
  * In this header, the macro IPASIR_API is defined as follows:
  * - if IPASIR_SHARED_LIB is not defined, then IPASIR_API is defined, but empty.
@@ -91,7 +93,7 @@ IPASIR_API void ipasir_release (void * solver);
  * negation overflow).  This applies to all the literal
  * arguments in API functions.
  */
-IPASIR_API void ipasir_add (void * solver, int lit_or_zero);
+IPASIR_API void ipasir_add (void * solver, int32_t lit_or_zero);
 
 /**
  * Add an assumption for the next SAT search (the next call
@@ -101,7 +103,7 @@ IPASIR_API void ipasir_add (void * solver, int lit_or_zero);
  * Required state: INPUT or SAT or UNSAT
  * State after: INPUT
  */
-IPASIR_API void ipasir_assume (void * solver, int lit);
+IPASIR_API void ipasir_assume (void * solver, int32_t lit);
 
 /**
  * Solve the formula with specified clauses under the specified assumptions.
@@ -129,7 +131,7 @@ IPASIR_API int ipasir_solve (void * solver);
  * Required state: SAT
  * State after: SAT
  */
-IPASIR_API int ipasir_val (void * solver, int lit);
+IPASIR_API int ipasir_val (void * solver, int32_t lit);
 
 /**
  * Check if the given assumption literal was used to prove the
@@ -146,7 +148,7 @@ IPASIR_API int ipasir_val (void * solver, int lit);
  * Required state: UNSAT
  * State after: UNSAT
  */
-IPASIR_API int ipasir_failed (void * solver, int lit);
+IPASIR_API int ipasir_failed (void * solver, int32_t lit);
 
 /**
  * Set a callback function used to indicate a termination requirement to the
@@ -177,7 +179,7 @@ IPASIR_API void ipasir_set_terminate (void * solver, void * data, int (*terminat
  * Required state: INPUT or SAT or UNSAT
  * State after: INPUT or SAT or UNSAT
  */
-IPASIR_API void ipasir_set_learn (void * solver, void * data, int max_length, void (*learn)(void * data, int * clause));
+IPASIR_API void ipasir_set_learn (void * solver, void * data, int max_length, void (*learn)(void * data, int32_t * clause));
 
 #ifdef __cplusplus
 } // closing extern "C"
