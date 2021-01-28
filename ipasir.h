@@ -131,7 +131,7 @@ IPASIR_API int ipasir_solve (void * solver);
  * Required state: SAT
  * State after: SAT
  */
-IPASIR_API int ipasir_val (void * solver, int32_t lit);
+IPASIR_API int32_t ipasir_val (void * solver, int32_t lit);
 
 /**
  * Check if the given assumption literal was used to prove the
