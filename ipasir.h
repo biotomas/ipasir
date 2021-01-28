@@ -89,7 +89,7 @@ IPASIR_API void ipasir_release (void * solver);
  *
  * Literals are encoded as (non-zero) integers as in the
  * DIMACS formats.  They have to be smaller or equal to
- * INT_MAX and strictly larger than INT_MIN (to avoid
+ * INT32_MAX and strictly larger than INT32_MIN (to avoid
  * negation overflow).  This applies to all the literal
  * arguments in API functions.
  */
