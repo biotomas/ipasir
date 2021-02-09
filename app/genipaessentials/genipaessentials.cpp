@@ -95,9 +95,10 @@ int lbins = 0;
 int lterns = 0;
 
 void learnCb(void* state, int* clause) {
-	if (clause[1] == 0) lunits++;
-	if (clause[2] == 0) lbins++;
-	if (clause[3] == 0) lterns++;
+	if (clause[0] == 0) ;
+	else if (clause[1] == 0) lunits++;
+	else if (clause[2] == 0) lbins++;
+	else if (clause[3] == 0) lterns++;
 }
 
 int main(int argc, char **argv) {
