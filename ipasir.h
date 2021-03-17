@@ -175,6 +175,8 @@ IPASIR_API void ipasir_set_terminate (void * solver, void * data, int (*terminat
  *     having the value passed in the ipasir_set_learn function (2nd parameter).
  *   - the argument "clause" is a pointer to a null terminated integer array containing the learned clause.
  *     the solver can change the data at the memory location that "clause" points to after the function call.
+ *   - the solver calls the callback function from the same thread
+ *     in which ipasir_solve has been called.
  *
  * Subsequent calls to ipasir_set_learn override the previously
  * set callback function.  Setting the callback function to NULL
