@@ -176,6 +176,10 @@ IPASIR_API void ipasir_set_terminate (void * solver, void * data, int (*terminat
  *   - the argument "clause" is a pointer to a null terminated integer array containing the learned clause.
  *     the solver can change the data at the memory location that "clause" points to after the function call.
  *
+ * Subsequent calls to ipasir_set_learn override the previously
+ * set callback function.  Setting the callback function to NULL
+ * with any max_length argument disables the callback.
+ *
  * Required state: INPUT or SAT or UNSAT
  * State after: INPUT or SAT or UNSAT
  */
