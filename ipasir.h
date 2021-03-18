@@ -106,12 +106,15 @@ IPASIR_API void ipasir_add (void * solver, int32_t lit_or_zero);
 IPASIR_API void ipasir_assume (void * solver, int32_t lit);
 
 /**
- * Solve the formula with specified clauses under the specified assumptions.
- * If the formula is satisfiable the function returns 10 and the state of the solver is changed to SAT.
- * If the formula is unsatisfiable the function returns 20 and the state of the solver is changed to UNSAT.
- * If the search is interrupted (see ipasir_set_terminate) the function returns 0 and the state of the solver is changed to INPUT.
- * This function can be called in any defined state of the solver. 
- * Note that the state of the solver _during_ execution of 'ipasir_solve' is undefined. 
+ * Solve the formula with specified clauses under the specified
+ * assumptions.  If the formula is satisfiable the function returns 10
+ * and the state of the solver is changed to SAT.  If the formula is
+ * unsatisfiable the function returns 20 and the state of the solver is
+ * changed to UNSAT.  If the search is interrupted (see
+ * ipasir_set_terminate) the function returns 0 and the state of the
+ * solver is changed to INPUT.  This function can be called in any
+ * defined state of the solver.  Note that the state of the solver
+ * _during_ execution of 'ipasir_solve' is undefined.
  *
  * Required state: INPUT or SAT or UNSAT
  * State after: INPUT or SAT or UNSAT
@@ -120,10 +123,11 @@ IPASIR_API int ipasir_solve (void * solver);
 
 /**
  * Get the truth value of the given literal in the found satisfying
- * assignment. Return 'lit' if True, '-lit' if False; 
- * 'ipasir_val(lit)' may return '0' if the found assignment is satisfying for both valuations of lit. 
- * Each solution that agrees with all non-zero values of ipasir_val() is a model of the formula. 
- * 
+ * assignment.  Return 'lit' if True, '-lit' if False; 'ipasir_val(lit)'
+ * may return '0' if the found assignment is satisfying for both
+ * valuations of lit.  Each solution that agrees with all non-zero
+ * values of ipasir_val() is a model of the formula.
+ *
  * This function can only be used if ipasir_solve has returned 10
  * and no 'ipasir_add' nor 'ipasir_assume' has been called
  * since then, i.e., the state of the solver is SAT.
@@ -137,10 +141,12 @@ IPASIR_API int32_t ipasir_val (void * solver, int32_t lit);
  * Check if the given assumption literal was used to prove the
  * unsatisfiability of the formula under the assumptions
  * used for the last SAT search. Return 1 if so, 0 otherwise.
- * 
- * The formula remains unsatisfiable even just under assumption literals for which ipasir_failed() returns 1. 
- * Note that for literals 'lit' which are not assumption literals, the behavior of 'ipasir_failed(lit)' is not specified. 
- * 
+ *
+ * The formula remains unsatisfiable even just under assumption literals
+ * for which ipasir_failed() returns 1.  Note that for literals 'lit'
+ * which are not assumption literals, the behavior of
+ * 'ipasir_failed(lit)' is not specified.
+ *
  * This function can only be used if ipasir_solve has returned 20 and
  * no ipasir_add or ipasir_assume has been called since then, i.e.,
  * the state of the solver is UNSAT.
@@ -151,14 +157,16 @@ IPASIR_API int32_t ipasir_val (void * solver, int32_t lit);
 IPASIR_API int ipasir_failed (void * solver, int32_t lit);
 
 /**
- * Set a callback function used to indicate a termination requirement to the
- * solver. The solver will periodically call this function and check its return
- * value during the search. The ipasir_set_terminate function can be called in any
- * state of the solver, the state remains unchanged after the call.
- * The callback function is of the form "int terminate(void * data)"
+ * Set a callback function used to indicate a termination requirement to
+ * the solver.  The solver will periodically call this function and
+ * check its return value during the search.  The ipasir_set_terminate
+ * function can be called in any state of the solver, the state remains
+ * unchanged after the call.  The callback function is of the form
+ * "int terminate(void * data)"
  *   - it returns a non-zero value if the solver should terminate.
  *   - the solver calls the callback function with the parameter "data"
- *     having the value passed in the ipasir_set_terminate function (2nd parameter).
+ *     having the value passed in the ipasir_set_terminate function
+ *     (2nd parameter).
  *
  * Required state: INPUT or SAT or UNSAT
  * State after: INPUT or SAT or UNSAT
@@ -166,15 +174,26 @@ IPASIR_API int ipasir_failed (void * solver, int32_t lit);
 IPASIR_API void ipasir_set_terminate (void * solver, void * data, int (*terminate)(void * data));
 
 /**
- * Set a callback function used to extract learned clauses up to a given length from the
- * solver. The solver will call this function for each learned clause that satisfies
- * the maximum length (literal count) condition. The ipasir_set_learn function can be called in any
- * state of the solver, the state remains unchanged after the call.
- * The callback function is of the form "void learn(void * data, int * clause)"
+ * Set a callback function used to extract learned clauses up to a given
+ * length from the solver.  The solver will call this function for each
+ * learned clause that satisfies the maximum length (literal count)
+ * condition.  The ipasir_set_learn function can be called in any state
+ * of the solver, the state remains unchanged after the call.  The
+ * callback function is of the form
+ * "void learn(void * data, int * clause)"
  *   - the solver calls the callback function with the parameter "data"
- *     having the value passed in the ipasir_set_learn function (2nd parameter).
- *   - the argument "clause" is a pointer to a null terminated integer array containing the learned clause.
- *     the solver can change the data at the memory location that "clause" points to after the function call.
+ *     having the value passed in the ipasir_set_learn function
+ *     (2nd parameter).
+ *   - the argument "clause" is a pointer to a null terminated integer
+ *     array containing the learned clause. the solver can change the
+ *     data at the memory location that "clause" points to after the
+ *     function call.
+ *   - the solver calls the callback function from the same thread
+ *     in which ipasir_solve has been called.
+ *
+ * Subsequent calls to ipasir_set_learn override the previously
+ * set callback function.  Setting the callback function to NULL
+ * with any max_length argument disables the callback.
  *
  * Required state: INPUT or SAT or UNSAT
  * State after: INPUT or SAT or UNSAT
