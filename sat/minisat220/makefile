@@ -65,6 +65,8 @@ libipasir$(SIG).a: .FORCE
 	@#
 	@# configure and build library
 	@#
+	make -C $(DIR) config
+	patch minisat-220/config.mk < minisat-config.patch
 	make -C $(DIR) lr
 	@#
 	@# compile glue code
