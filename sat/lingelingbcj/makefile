@@ -20,7 +20,7 @@ TARGET=libipasir$(SIG).a
 #-----------------------------------------------------------------------#
 
 CC=g++
-CFLAGS=-Wall -DNDEBUG -O3
+CFLAGS=-Wall -DNDEBUG -O3 -fPIC
 
 #-----------------------------------------------------------------------#
 #- REQUIRED TOP RULES --------------------------------------------------#
@@ -47,7 +47,7 @@ libipasir$(SIG).a: .FORCE
 	@#
 	@# configure and build library
 	@#
-	cd $(DIR); ./configure.sh
+	cd $(DIR); ./configure.sh -fPIC
 	make liblgl.a -C $(DIR)
 	@#
 	@# compile glue code

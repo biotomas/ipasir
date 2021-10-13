@@ -30,7 +30,7 @@ TARGET=libipasir$(SIG).a
 #-----------------------------------------------------------------------#
 
 CC=gcc
-CFLAGS=-Wall -DNDEBUG -O3
+CFLAGS=-Wall -DNDEBUG -O3 -fPIC
 
 #-----------------------------------------------------------------------#
 #- REQUIRED TOP RULES --------------------------------------------------#
@@ -55,7 +55,7 @@ libipasir$(SIG).a: .FORCE
 	@#
 	@# configure and build library
 	@#
-	cd $(DIR); ./configure -O --no-trace
+	cd $(DIR); ./configure -O --no-trace --shared
 	make -C $(DIR)
 	@#
 	@# compile glue code
