@@ -99,9 +99,8 @@ public:
     } else if (SATret == 20) {
       conflict.clear();
       for( int i=0; i < assumptions.size(); ++i ) {
-	int v = assumptions[i] > 0 ? assumptions[i] : -assumptions[i];
-	IPASIR( /*std::cerr << "c failed " << v << std::endl; */ if(ipasir_failed(ipasirSolver,  v)) conflict.push_back( assumptions[i]); );
-	IPASIR( /*std::cerr << "c failed " << -v << std::endl;*/ if(ipasir_failed(ipasirSolver, -v)) conflict.push_back(-assumptions[i]); );
+	IPASIR( if(ipasir_failed(ipasirSolver,  assumptions[i])) conflict.push_back(-assumptions[i]);
+	        else if(ipasir_failed(ipasirSolver, -assumptions[i])) conflict.push_back(-assumptions[i]); );
       }
     } else {
       std::cerr << "ipasir SAT solver terminated with unexpected exit code: " << SATret << ". Abort." << std::endl;
