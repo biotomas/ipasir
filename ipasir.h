@@ -69,7 +69,7 @@ IPASIR_API const char * ipasir_signature ();
 IPASIR_API void * ipasir_init ();
 
 /**
- * Release the solver, i.e., all its resoruces and
+ * Release the solver, i.e., all its resources and
  * allocated memory (destructor). The solver pointer
  * cannot be used for any purposes after this call.
  *
